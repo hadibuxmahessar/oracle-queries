@@ -1,0 +1,12 @@
+update attendance_detail ad
+set tt_duration = (SELECT
+        sum(TO_NUMBER(TO_CHAR(TO_DATE(ttd.duration,'HH24:MI'),'SSSSS'))/60)--,employee_code, ttd.time_ticket_code, ttm.time_ticket_date
+        FROM
+        time_ticket_detail ttd
+        INNER JOIN time_ticket_master ttm ON ttd.time_ticket_code = ttm.time_ticket_code
+        where ttd.employee_code = ad.employee_code and TO_CHAR(ttm.time_ticket_date,'DD-MON-YYYY') = '16-JUL-2022'
+        group by ttm.time_ticket_date
+        --order by ttm.time_ticket_date
+        )
+where attendance_code in(select attendance_code from attendance_master 
+                        where TO_CHAR(attendance_date,'DD-MON-YYYY') = '16-JUL-2022')
